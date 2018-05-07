@@ -26,10 +26,38 @@
  
  Las clases principales que serán 3:
  
- 1*- AccountAuthenticatorService.java (extends Service): Esta clase será la encargada de comunicarse con la cuenta.
+ 1- AccountAuthenticatorService.java (extends Service): Esta clase será la encargada de comunicarse con la cuenta.
  
- 2**- AccountAuthenticatorImpl.java (extends AbstractAccountAuthenticator): Esta clase realizará la función de crear, autorizar, etc nuestra cuenta.
+ 2- AccountAuthenticatorImpl.java (extends AbstractAccountAuthenticator): Esta clase realizará la función de crear, autorizar, etc nuestra cuenta.
  
- 3***- AccountManagerSimpleActivity.java (extends Activity): Esta clase realizará el inicio de sesión de usuario.
+ 3- AccountManagerSimpleActivity.java (extends Activity): Esta clase realizará el inicio de sesión de usuario.
+ 
+ Los archivos xml son 2:
+ 
+ 1- account_preference.xml: Este xml nos devolverá la ventana de registro.
+ 
+ 2- authenticator.xml: Este xml se comunica con el account_preference.xml y añade una serie de datos.
+ 
+ Los permisos AndroidManifest.xml:
+ 
+ <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+ <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+ <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+ <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+ 
+ *Más dentro del apartado <application
+ 
+         <service
+            android:name="AccountAuthenticatorService" //esta es la clase que crearemos
+            android:exported="true"
+            android:process=":auth">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" /> //el xml que también crearemos
+        </service>
+ 
  
  
