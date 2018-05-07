@@ -7,9 +7,11 @@
  y así se ejecute automáticamente sin necesidad de volver a introducir las credenciales, un método típico de las aplicaciones como Facebook,
  Whatsapp, etc.
  
- Aquí os dejo un tutorial que estoy siguiendo para realizar esto propio de Android:
+ Aquí os dejo los tutoriales que estoy siguiendo para realizar esto propio de Android:
  
  https://developer.android.com/reference/android/accounts/AbstractAccountAuthenticator
+ 
+ https://github.com/jiahaoliuliu/AccountManagerSample
  
  /*----*/
  
