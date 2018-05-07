@@ -103,9 +103,7 @@ authenticator.xml:
     
 **Aquí le añadiremos los iconos deseados el nombre de la app y la comunicación al otro archivo xml
 
-Y por último añadimos los permisos más el servicio en el AndroidManifest.xml
-
-Reinstalamos la app y vamos a Cuentas de nuestro móvil, añadimos cuentas y podremos ver nuestra app que ya está casi preparada para ser como cuenta, pero por el momento no nos deja.
+Y por último añadimos los permisos más el servicio en el AndroidManifest.xml. Con esto todo reinstalamos la app y vamos a Cuentas de nuestro móvil, añadimos cuentas y podremos ver nuestra app que ya está en cuentas, pero por el momento no nos deja añadirla nos falta añadirle las funciones necesarias.
 
 
  
