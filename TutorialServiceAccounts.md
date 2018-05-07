@@ -60,4 +60,53 @@
         </service>
  
  
+ # Empieza lo bueno
+ 
+ Creamos la clase *AccountAuthenticatorService extends Service* nos dará un error, vamos a ese error y implementamos los métodos necesarios, dentro de la misma clase creamos la clase *AccountAuthenticatorImpl extends AbstractAccountAuthenticator* y realizamos lo mismo implementamos los métodos que nos pide. 
+(Esto lo hago en la misma clase ya que son clases que se van a comunicar entre sí y es mñas fácil de ver el código, se puede hacer aparte las clases sin problemas).
+
+Por último creamos la clase *AccountManagerSimpleActivity extends Activity*
+
+**Estas clases las vamos a dejar vacías por el momento.
+
+Dentro de la carpeta "res" de nuestro proyecto creamos el directorio "xml" y dentro del mismo creamos los 2 archivos xml:
+
+account_preference.xml:
+
+    <?xml version="1.0" encoding="utf-8"?>
+    <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="General Settings" />
+    <PreferenceScreen
+        android:key="account_settings"
+        android:title="Account Settings"
+        android:summary="Sync frequency, notifications, etc." >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.example.pargibay.androidphprpcxml"
+            android:targetClass="com.example.pargibay.androidphprpcxml.AccountManagerSimpleActivity" />
+    </PreferenceScreen>
+    </PreferenceScreen>
+    
+**Esto es algo general que se le añade pero alguna modificación le realizaremos
+
+authenticator.xml:
+
+    <?xml version="1.0" encoding="utf-8"?>
+    <account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accountType="com.example.pargibay.androidphprpcxml"
+    android:icon="@drawable/logoapp"
+    android:smallIcon="@drawable/logoapp"
+    android:label="@string/app_name"
+    android:accountPreferences="@xml/account_preference"
+    />
+    
+**Aquí le añadiremos los iconos deseados el nombre de la app y la comunicación al otro archivo xml
+
+Y por último añadimos los permisos más el servicio en el AndroidManifest.xml
+
+Reinstalamos la app y vamos a Cuentas de nuestro móvil, añadimos cuentas y podremos ver nuestra app que ya está casi preparada para ser como cuenta, pero por el momento no nos deja.
+
+
+ 
  
