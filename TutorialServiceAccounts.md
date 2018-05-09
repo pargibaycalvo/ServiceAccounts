@@ -13,6 +13,8 @@
  
  https://github.com/jiahaoliuliu/AccountManagerSample
  
+ https://github.com/gosyujin/MinimumAccountManagerSample
+ 
  /*----*/
  
  Para realizar esto hay que tener claro que es lo que vamos a realizar, podemos decirle a la app que para nuestro registro nos pida
