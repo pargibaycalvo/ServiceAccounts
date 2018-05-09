@@ -135,7 +135,7 @@ En el metodo **addAccount**, antes de nada crear una activityMain que tenga las 
         
 Os dejo mi activityMain para que os hagáis una idea de como hacerlo simple:
         
-public class AccountManagerSimpleActivity extends Activity {
+    public class AccountManagerSimpleActivity extends Activity {
 
     private String username, password;
     private Button registration, cancel;
