@@ -36,11 +36,9 @@
  
  3- AccountManagerSimpleActivity.java (extends Activity): Esta clase realizará el inicio de sesión de usuario.
  
- # Los archivos xml son 2:
- 
- 1- account_preference.xml: Este xml nos devolverá la ventana de registro.
- 
- 2- authenticator.xml: Este xml se comunica con el account_preference.xml y añade una serie de datos.
+ # Archivos xml:
+  
+ 1- authenticator.xml: Este xml se comunica con el account_preference.xml y añade una serie de datos.
  
  # Los permisos AndroidManifest.xml:
  
@@ -51,16 +49,13 @@
  
  *Más dentro del apartado <application
  
-         <service
-            android:name="AccountAuthenticatorService" //esta es la clase que crearemos
-            android:exported="true"
-            android:process=":auth">
+        <service android:name=".AccountAuthenticatorService" android:exported="true">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" /> //el xml que también crearemos
+                android:resource="@xml/authenticator" />
         </service>
  
  
@@ -71,44 +66,136 @@
 
 Por último creamos la clase *AccountManagerSimpleActivity extends Activity*
 
-**Estas clases las vamos a dejar vacías por el momento.
+**Estas clases las vamos a dejar vacías por el momento, así vemos que hace la app con nuestro móvil.
 
-Dentro de la carpeta "res" de nuestro proyecto creamos el directorio "xml" y dentro del mismo creamos los 2 archivos xml:
-
-account_preference.xml:
-
-    <?xml version="1.0" encoding="utf-8"?>
-    <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="General Settings" />
-    <PreferenceScreen
-        android:key="account_settings"
-        android:title="Account Settings"
-        android:summary="Sync frequency, notifications, etc." >
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="com.example.pargibay.androidphprpcxml"
-            android:targetClass="com.example.pargibay.androidphprpcxml.AccountManagerSimpleActivity" />
-    </PreferenceScreen>
-    </PreferenceScreen>
-    
-**Esto es algo general que se le añade pero alguna modificación le realizaremos
+Dentro de la carpeta "res" de nuestro proyecto creamos el directorio "xml" y dentro del mismo creamos el archivo xml:
 
 authenticator.xml:
 
     <?xml version="1.0" encoding="utf-8"?>
     <account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accountType="com.example.pargibay.androidphprpcxml"
+    android:accountType="jp.example"
     android:icon="@drawable/logoapp"
     android:smallIcon="@drawable/logoapp"
     android:label="@string/app_name"
-    android:accountPreferences="@xml/account_preference"
     />
     
-**Aquí le añadiremos los iconos deseados el nombre de la app y la comunicación al otro archivo xml
+**Aquí le añadiremos los iconos deseados el nombre de la app
 
-Y por último añadimos los permisos más el servicio en el AndroidManifest.xml. Con esto todo reinstalamos la app y vamos a Cuentas de nuestro móvil, añadimos cuentas y podremos ver nuestra app que ya está en cuentas, pero por el momento no nos deja añadirla nos falta añadirle las funciones necesarias.
+Y por último añadimos los permisos más el service en el AndroidManifest.xml. Con esto todo reinstalamos la app y vamos a Cuentas de nuestro móvil, añadimos cuentas y podremos ver nuestra app que ya está en cuentas, pero por el momento no nos deja añadirla nos falta añadirle las funciones necesarias.
 
+# Picar código en las clases:
 
+**En la clase AccountAuthenticatorService, tenemos que llamar a la clase AccountAuthenticatorImpl ya que son 2 clases que una le dará servicio a la otra para que ejecute los métodos que queremos utilizar.
+
+    public class AccountAuthenticatorService extends Service {
+
+    private AccountAuthenticatorImpl mAuchenticator;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mAuchenticator = new AccountAuthenticatorImpl(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mAuchenticator.getIBinder();
+    }
+    
+La clase AccountAuthenticatorImpl se puede ver que nos implementó unos cuantos métodos, no hay que utilizarlos todos solo se utilizarán los métodos que queremos utilizar para nuestra app. Para saber que hacen todos estos métodos os dejo un video donde explica como y para que se usan https://www.youtube.com/watch?v=xS-ggopAD8w&t=154s.
+
+En esta app utilizaremos 2 el **addAccount** que será el encargado de dejarnos añadir una cuenta y el **getAuthToken** para validar esas cuentas creadas, guardarlas y que tengan uso. 
+
+Declaramos un Context con su constructor:
+
+    private static class AccountAuthenticatorImpl extends AbstractAccountAuthenticator {
+        private Context mContext;
+
+        public AccountAuthenticatorImpl(Context context) {
+            super(context);
+            mContext = context;
+        }
+
+En el metodo **addAccount**, antes de nada crear una activityMain que tenga las credenciales que queráis para realizar el registro de la cuenta. Esta nos abre una activitymain para poder escribir nuestras credenciales. 
+
+        @Override
+        public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
+            Intent add = new Intent(mContext, AccountManagerSimpleActivity.class);
+            add.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+            Bundle reply = new Bundle();
+            reply.putParcelable(AccountManager.KEY_INTENT, add);
+            return reply;
+        }
+        
+Os dejo mi activityMain para que os hagáis una idea de como hacerlo simple:
+        
+public class AccountManagerSimpleActivity extends Activity {
+
+    private String username, password;
+    private Button registration, cancel;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_account_manager_simple);
+
+        final EditText usernameEdit = (EditText) findViewById(R.id.editTextUser);
+        final EditText passwordEdit = (EditText) findViewById(R.id.editTextUser);
+
+        registration = (Button) findViewById(R.id.btnRegister);
+        registration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                username = usernameEdit.getText().toString();
+                password = passwordEdit.getText().toString();
+                attemptAuth(username, password);
+            }
+
+        });
+
+        cancel = (Button) findViewById(R.id.btnCancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+    }
+
+    private void attemptAuth(String username, String password) {
+        Account account = new Account(username, "jp.example");
+        AccountManager accountManager = AccountManager.get(this);
+        accountManager.addAccountExplicitly(account, password, null);
+        finish();
+    }
+
+ La función **attemptAuth** será la encargada de, los datos que introduzcamos validarlos y guardarlos a su vez una vez apruebe las credenciales finaliza el registro.
+ 
+ Con esto tendremos una parte cubierta, si vamos a cuentas y queremos añadir nuestra app veremos como nos arranca la activityMain que creamos. Ahora le daremos uso al método **getAuthToken**:
+ 
+         @Override
+        public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
+            AccountManager am = AccountManager.get(mContext);
+            String username = account.name;
+            String password = am.getPassword(account);
+            String token = "sample-no-token";
+
+            Bundle result = new Bundle();
+            result.putString(AccountManager.KEY_ACCOUNT_NAME, username);
+            result.putString(AccountManager.KEY_ACCOUNT_TYPE, "jp.example");
+            result.putString(AccountManager.KEY_AUTHTOKEN, token);
+            return result;
+        }
+ 
+ Con este método le inidicamos que nuestras credenciales tienen un usuario y contraseña, token va a ser un mensaje que nos devolverá en nuestra mainActivity.
+ 
+ 
  
  
