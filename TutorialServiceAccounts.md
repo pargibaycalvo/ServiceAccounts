@@ -1,5 +1,5 @@
-# ServiceAccounts
- Add accounts from the app Android
+# ServiceAccounts and SyncAdapter
+ Add accounts from the app Android and synchronize the accounts
  
  # Este tutorial lo estoy realizando a los pocos iré añadiendo y modificando apartados conforme voy avanzando y encontrando errores.
  
