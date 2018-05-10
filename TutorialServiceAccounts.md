@@ -178,7 +178,7 @@ Os dejo mi activityMain para que os hagáis una idea de como hacerlo simple:
 
  La función **attemptAuth** será la encargada de, los datos que introduzcamos validarlos y guardarlos a su vez una vez apruebe las credenciales finaliza el registro.
  
- Con esto tendremos una parte cubierta, si vamos a cuentas y queremos añadir nuestra app veremos como nos arranca la activityMain que creamos. Ahora le daremos uso al método **getAuthToken**:
+ Con esto tendremos una parte cubierta, si vamos a cuentas y queremos añadir nuestra app veremos como nos arranca la activityMain que creamos. Ahora le daremos uso al método **getAuthToken** para poder añadir la cuenta y que quede reflejada en el móvil:
  
          @Override
         public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
@@ -196,7 +196,7 @@ Os dejo mi activityMain para que os hagáis una idea de como hacerlo simple:
  
  Con este método le indicamos que nuestras credenciales tienen un usuario y contraseña, el token va a ser un mensaje que nos devolverá en nuestra mainActivity y nos servirá de comunicación entra las clases y el xml.
  
- Si ahora añadimos la cuenta, nos tendría que dejar pero esta cuenta a pesar de que está añadida y visiblemente parece que la va a usar cuando iniciemos la app no va a ser así, falta una función importante de sincronización el SyncAdapter.
+ Si ahora añadimos la cuenta, nos tendría que dejar pero esta cuenta a pesar de que está añadida y visiblemente parece que la va a usar cuando iniciemos la app, pero no va a ser así, falta una función importante de sincronización el SyncAdapter.
  
  
  
