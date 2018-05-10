@@ -194,7 +194,9 @@ Os dejo mi activityMain para que os hagáis una idea de como hacerlo simple:
             return result;
         }
  
- Con este método le inidicamos que nuestras credenciales tienen un usuario y contraseña, token va a ser un mensaje que nos devolverá en nuestra mainActivity.
+ Con este método le indicamos que nuestras credenciales tienen un usuario y contraseña, el token va a ser un mensaje que nos devolverá en nuestra mainActivity.
+ 
+ Si ahora añadimos la cuenta, nos tendría que dejar pero esta cuenta a pesar de que está añadida y visiblemente parece que la va a usar cuando iniciemos la app no va a ser así, falta una función importante de sincronización el SyncAdapter.
  
  
  
