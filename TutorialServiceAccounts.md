@@ -198,6 +198,56 @@ Os dejo mi activityMain para que os hagáis una idea de como hacerlo simple:
  
  Si ahora añadimos la cuenta, nos tendría que dejar pero esta cuenta a pesar de que está añadida y visiblemente parece que la va a usar cuando iniciemos la app, pero no va a ser así, falta una función importante de sincronización el SyncAdapter.
  
+ # SyncAdapter
+ 
+ Este método lo vamos a usar en la app para que a la hora de iniciarla se autoconecte con la cuenta que le añadimos anteriormente, es similar al **accountManager**, tiene 2 clases, una será la de servicio y otra la que ejecutará las funciones, más, 1 xml y servicios.
+ 
+Primero crearemos las 2 clases, la primera será la de SyncAdapterService, que como el service de accountManager realiza la misma función:
+
+    public class SyncAdapterService extends Service {
+
+    private static SyncAdapter sSyncAdapter = null;
+    private static final Object sSyncAdapterLock = new Object();
+
+    @Override
+    public void onCreate() {
+        synchronized (sSyncAdapterLock) {
+            if (sSyncAdapter == null) {
+                sSyncAdapter = new SyncAdapter(getApplicationContext(), true);
+            }
+        }
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return sSyncAdapter.getSyncAdapterBinder();
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+    }
+    }
+    
+Ahora la clase SyncAdapter, será la encargada de realizar nuestra función de sincronización entre las cuentas:
+
+    public class SyncAdapter extends AbstractThreadedSyncAdapter{
+
+    public SyncAdapter(Context context, boolean autoInitialize) {
+        super(context, autoInitialize);
+    }
+
+    @Override
+    public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+        return;
+        }
+    }
+    }
+    
+
+
+
+ 
  
  
  
