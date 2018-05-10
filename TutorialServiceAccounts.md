@@ -84,7 +84,7 @@ authenticator.xml:
 
 Y por último añadimos los permisos más el service en el AndroidManifest.xml. Con esto todo reinstalamos la app y vamos a Cuentas de nuestro móvil, añadimos cuentas y podremos ver nuestra app que ya está en cuentas, pero por el momento no nos deja añadirla nos falta añadirle las funciones necesarias.
 
-# Picar código en las clases:
+# Picar código en las clases accountManager:
 
 **En la clase AccountAuthenticatorService, tenemos que llamar a la clase AccountAuthenticatorImpl ya que son 2 clases que una le dará servicio a la otra para que ejecute los métodos que queremos utilizar.
 
@@ -244,8 +244,38 @@ Ahora la clase SyncAdapter, será la encargada de realizar nuestra función de s
     }
     }
     
+Creamos un xml nuevo donde creamos el anterior para el accountManager en la carpeta que creamos llamada xml:
 
+    <?xml version="1.0" encoding="utf-8"?>
+    <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
+    android:contentAuthority="@string/content_authority"
+    android:accountType="@string/auth_type"
+    android:userVisible="true"
+    android:allowParallelSyncs="true"
+    android:isAlwaysSyncable="true"
+    android:supportsUploading="false"/>
 
+Si nos fijamos nos pide que creemos 2 strings en nuestro archivo de strings dentro de la carpeta values, los creamos:
+
+    <string name="auth_type">jp.example</string>
+    <string name="content_authority">com.example.pargibay.androidphprpcxml</string>
+
+    
+Ahora que tenemos las clases y el xml hechos podemos añadir el servicio en el AndroidManifest.xml:
+
+        <service
+            android:name=".SyncAdapterService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_adapter" />
+        </service>
+
+# Picar código en las clases SyncAdapter
 
  
  
